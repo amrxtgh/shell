@@ -16,11 +16,11 @@ rm -rf "${BUILD_DIR}"
 mkdir -p "${BUILD_DIR}"
 
 echo -e "${GREEN}***Generating build files***${NC}"
-cmake -S "${PROJECT_ROOT}" -B "${BUILD_DIR}"
+cmake -S "${PROJECT_ROOT}" -B "${BUILD_DIR}" -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 echo ""
 
 echo -e "${GREEN}***Building the project***${NC}"
-cmake --build "${BUILD_DIR}"
+cmake --build "${BUILD_DIR}" --verbose
 echo ""
 
 echo -e "${GREEN}***Installing the project***${NC}"
