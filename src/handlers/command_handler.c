@@ -1,8 +1,25 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "command_handler.h"
+#include <sys/wait.h>
+#include <unistd.h>
 #include "commands.h"
 
+static void execute_external(char *args[]) {
+	pid_t pid = fork();
+	if (pid < 0) {
+		perror("fork");
+		return;
+	}
+	if (pid == 0) {
+		execvp(args[0], args);
+		perror(args[0]);
+		_exit(EXIT_FAILURE);
+	} else {
+		int status;
+		waitpid(pid, &status, 0);
+	}
+} 
 void execute_command(int argc, char *args[]){
   if (argc == 0) {
     return;
@@ -33,7 +50,7 @@ void execute_command(int argc, char *args[]){
     }
   }
   else {
-    fprintf(stderr, "Command not found: %s\n", args[0]);
+	  execute_external(args);
   }
 }
 
